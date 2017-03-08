@@ -80,7 +80,7 @@ module.exports = class TeacherClassesView extends RootView
     @listenToOnce modal, 'hide', @render
 
   onClickCreateClassroomButton: (e) ->
-    return if me.id isnt @teacherID # prevent creating classrooms for other users for now
+    return unless me.id is @teacherID # Viewing page as admin
     window.tracker?.trackEvent 'Teachers Classes Create New Class Started', category: 'Teachers', ['Mixpanel']
     classroom = new Classroom({ ownerID: me.id })
     modal = new ClassroomSettingsModal({ classroom: classroom })
@@ -108,6 +108,7 @@ module.exports = class TeacherClassesView extends RootView
     @listenToOnce modal, 'hide', @render
 
   onClickArchiveClassroom: (e) ->
+    return unless me.id is @teacherID # Viewing page as admin
     classroomID = $(e.currentTarget).data('classroom-id')
     classroom = @classrooms.get(classroomID)
     classroom.set('archived', true)
@@ -118,6 +119,7 @@ module.exports = class TeacherClassesView extends RootView
     }
 
   onClickUnarchiveClassroom: (e) ->
+    return unless me.id is @teacherID # Viewing page as admin
     classroomID = $(e.currentTarget).data('classroom-id')
     classroom = @classrooms.get(classroomID)
     classroom.set('archived', false)
